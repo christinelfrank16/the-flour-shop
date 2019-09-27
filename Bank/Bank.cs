@@ -11,7 +11,7 @@ namespace Bank
         public BrickAndMortorBank(string name)
         {
             Name = name;
-            Account = 100.00;
+            Account = 50.00;
         }
 
         public void Welcome()

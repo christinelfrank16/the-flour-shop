@@ -21,18 +21,33 @@ _{Leave nothing to chance! You want it to be easy for potential users, employers
 
 ## Known Bugs
 
-_{Are there issues that have not yet been resolved that you want to let users know you know?  Outline any issues that would impact use of your application.  Share any workarounds that are in place. }_
+None known at this time.
 
 ## Support and contact details
 
-_{Let people know what to do if they run into any issues or have questions, ideas or concerns.  Encourage them to contact you or make a contribution to the code.}_
+Find a bug?! Add an issue to the GitHub Repo.
+Repo: https://github.com/christinelfrank16/the-flour-shop
+
+Other Contact 
+Email: christine.braun13@gmail.com
+LinkedIn: https://www.linkedin.com/in/christine-frank/
+
+## Application Specifications
+
+| Behavior | Input | Output |
+|:-----|:-----:|:-----:|
+|The application displays a welcome prompt upon first start of app |*User starts app*| "Welcome to The Flour Shop! "|
+|The application displays a product costs with welcome prompt upon first start of app |*User starts app*| "Welcome to The Flour Shop! "<br>"Our product prices are: Bread $2 each, Pastry $1 each" |
+|The application accepts positive numeric user input to specify the quantity of products they'd like | 2 Bread | Adds 2 Bread to order |
+|The application returns the total cost of the order when the user indicates they would like to checkout |"Checkout"| "You ordered:<br> 2 Bread<br> Your total is: $2"|
+|The application returns a good-bye prompt after checkout has been completed |"Checkout" |-order summary-<br>"Good-bye! See you again soon!"|
 
 ## Technologies Used
 
-_{Tell me about the languages and tools you used to create this app. Assume that I know you probably used HTML and CSS. If you did something really cool using only HTML, point that out.}_
+* C#
 
 ### License
 
-*{Determine the license under which this application can be used.  See below for more details on licensing.}*
+*This application is licensed under the MIT license*
 
-Copyright (c) 2016 **_{List of contributors or company name}_**
+Copyright (c) 2019 **Christine Frank**

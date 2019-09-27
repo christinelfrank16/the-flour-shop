@@ -24,12 +24,17 @@ namespace Bakery
         {
             Console.WriteLine("Welcome to "+ Name + "!");
         }
-
+        
+        public static void GoodByeMessage()
+        {
+            Console.WriteLine("Thank you, please come again!");
+        }
 
 
         public void ProductsListing()
         {
             Console.WriteLine("Here is a list of our products: ");
+            Console.WriteLine("");
             ListBreads();
             ListPastries();
             Console.WriteLine("If you don't see something you want, we may be able to make one for you.");
@@ -38,7 +43,7 @@ namespace Bakery
         public void ListBreads()
         {
             Console.WriteLine("Breads: ");
-            Console.WriteLine("---------------------------");
+            Console.WriteLine("");
             foreach(KeyValuePair<Bread, int> breadPair in MadeBread)
             {
                 if(breadPair.Value > 0)
@@ -55,12 +60,12 @@ namespace Bakery
             char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
 
             Console.WriteLine("Pastries: ");
-            Console.WriteLine("---------------------------");
+            Console.WriteLine("");
             foreach (KeyValuePair<Pastry, int> pastryPair in MadePastry)
             {
                 if (pastryPair.Value > 0)
                 {
-                    Console.WriteLine(" + " + (pastryPair.Value) + " - " + (pastryPair.Key.IsSavory ? "Savory " : "Sweet ") + "pastry in the shape of a" + (vowels.Contains(pastryPair.Key.Shape[0]) ? "n " + pastryPair.Key.Shape : " " + pastryPair.Key.Shape));
+                    Console.WriteLine(" + Qty " + (pastryPair.Value) + " - " + (pastryPair.Key.IsSavory ? "Savory " : "Sweet ") + "pastry in the shape of a" + (vowels.Contains(pastryPair.Key.Shape[0]) ? "n " + pastryPair.Key.Shape : " " + pastryPair.Key.Shape));
                     Console.WriteLine("Price: $" + pastryPair.Key.DefaultCost.ToString() + " each");
                 }
             }
@@ -76,29 +81,31 @@ namespace Bakery
             {
                 bool[] breadRequest = RequestBread();
                 int breadCount = IsBreadMade(breadRequest);
-                int[] breadToMake = ProductQuantity(breadCount);
+                Bread breadEx = new Bread(breadRequest[0], breadRequest[1]);
+                int breadInOrder = ExistingOrderCount(breadEx);
+                int[] breadToMake = ProductQuantity(breadCount, breadInOrder);
                 if (breadToMake[0] > 0)
                 {
+                    Console.WriteLine("");
                     Console.WriteLine("Your bread just went in the oven! Please wait. It's worth it!");
                     MakeBread(breadRequest[0], breadRequest[1], breadToMake[0]);
                 }
-                Bread breadEx = new Bread(breadRequest[0], breadRequest[1]);
                 AddToOrder(breadEx, breadToMake[1]);
-                RemoveFromShopInventory(breadEx, breadToMake[1]);
             }
             else if(product.StartsWith('p'))
             {
                 string[] pastryRequest = RequestPastry();
                 int pastryCount = IsPastryMade(Convert.ToBoolean(pastryRequest[0]),pastryRequest[1]);
-                int[] pastryToMake = ProductQuantity(pastryCount);
+                Pastry pastryEx = new Pastry(Convert.ToBoolean(pastryRequest[0]), pastryRequest[1]);
+                int pastryInOrder = ExistingOrderCount(pastryEx);
+                int[] pastryToMake = ProductQuantity(pastryCount, pastryInOrder);
                 if(pastryToMake[0] > 0)
                 {
+                    Console.WriteLine("");
                     Console.WriteLine("Your " + (pastryToMake[0] == 1 ? "pastry" : "pastries") + " just went in the oven! Please wait. It's worth it!");
                     MakePastry(Convert.ToBoolean(pastryRequest[0]), pastryRequest[1], pastryToMake[0]);
                 }
-                Pastry pastryEx = new Pastry(Convert.ToBoolean(pastryRequest[0]), pastryRequest[1]);
                 AddToOrder(pastryEx, pastryToMake[1]);
-                RemoveFromShopInventory(pastryEx, pastryToMake[1]);
             }
             else if(product.StartsWith('n'))
             {
@@ -106,28 +113,28 @@ namespace Bakery
             }
         }
 
-        public int[] ProductQuantity(int existingCount)
+        public int[] ProductQuantity(int existingShopCount, int inOrderCount)
         {
             int countToMake = 0;
             Console.WriteLine("How many would you like to order?");
             int count = Interaction.AskPositiveIntQuestion("I didn't understand that. How many would you like?");
-            if(existingCount > 0 && count > existingCount)
+            if(existingShopCount-inOrderCount > 0 && count > (existingShopCount-inOrderCount))
             {
-                Console.WriteLine("We don't have that many. Would you accept " + existingCount + " instead? [Y/N]");
-                bool orderExisting = Interaction.AskYesNoQuestion("Please let me know. Would you accept " + existingCount + " instead? [Y/N]");
+                Console.WriteLine("We don't have that many. Would you accept " + existingShopCount + " instead? [Y/N]");
+                bool orderExisting = Interaction.AskYesNoQuestion("Please let me know. Would you accept " + existingShopCount + " instead? [Y/N]");
                 if(orderExisting)
                 {
                     Console.WriteLine("Thank you for being so flexible!");
                 }
                 else
                 {
-                    Console.WriteLine("Ok, no worries! We can make " + (count - existingCount).ToString() + " more for you!");
-                    countToMake = count - existingCount;
+                    Console.WriteLine("Ok, no worries! We can make " + (count - existingShopCount).ToString() + " more for you!");
+                    countToMake = count - existingShopCount;
                 }
             }
-            else if (existingCount == 0)
+            else if (existingShopCount-inOrderCount <= 0)
             {
-                countToMake = count;
+                countToMake = count + (existingShopCount - inOrderCount);
             }
             else if(count == 0)
             {
@@ -160,8 +167,8 @@ namespace Bakery
             bool isSavory = Interaction.AskYesNoQuestion("Sorry, I didn't get that. Would you like your pastry to be savory? [Y/N]");
 
             string[] shapes = new string[]{"circle", "flower", "star", "oblong", "square"};
-            Console.WriteLine("What shape would you like? Our options are: " + shapes.ToString());
-            string shape = Interaction.AskOptionsQuestion(shapes, "Ach, it's loud in here. What shape would you like, again? Our options are: " + shapes.ToString());
+            Console.WriteLine("What shape would you like? Our options are: " + string.Join(", ", shapes));
+            string shape = Interaction.AskOptionsQuestion(shapes, "Ach, it's loud in here. What shape would you like, again? Our options are: " + string.Join(", ", shapes));
             string[] requestedPastry = new string[]{isSavory.ToString(), shape};
             return requestedPastry;
         }
@@ -188,6 +195,18 @@ namespace Bakery
             }
             return pastryCount;
         }
+
+        public int ExistingOrderCount(Product product)
+        {
+            int count = 0;
+            Product inOrder = Order.Where(orderPair => orderPair.Key == product).FirstOrDefault().Key;
+            if (inOrder != null)
+            {
+                count = Order[inOrder];
+            }
+            return count;
+
+        }
         public void AddToOrder(Product product, int count)
         {
             Product inOrder = Order.Where(orderPair => orderPair.Key == product).FirstOrDefault().Key;
@@ -199,6 +218,37 @@ namespace Bakery
             {
                 Order.Add(product, count);
             }
+        }
+
+        public void DisplayOrder()
+        {
+            Interaction.AddSpace();
+            Console.WriteLine("Your current order:");
+            Console.WriteLine("Bread: ");
+            double breadSubTotal = 0;
+            foreach (KeyValuePair<Product, int> breadPair in Order.Where(pair => pair.Key.Type == "Bread"))
+            {
+                Bread bread = (Bread) breadPair.Key;
+                Console.WriteLine(" + Qty " + (breadPair.Value) + " - " + (bread.IsGlutenFree ? "Gluten free bread " : "Bread ") + "that is " + (bread.IsSliced ? "sliced" : "a whole loaf"));
+                Console.WriteLine("Price: $" + breadPair.Key.DefaultCost.ToString() + " each");
+                breadSubTotal += breadPair.Key.DefaultCost;
+            }
+            Console.WriteLine("Bread Subtototal: " + breadSubTotal.ToString());
+            Console.WriteLine("");
+            Console.WriteLine("Pastry: ");
+            char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
+            double pastrySubtotal = 0;
+            foreach(KeyValuePair<Product,int> pastryPair in Order.Where(pair => pair.Key.Type == "Pastry"))
+            {
+                Pastry pastry = (Pastry) pastryPair.Key;
+                Console.WriteLine(" + " + (pastryPair.Value) + " - " + (pastry.IsSavory ? "Savory " : "Sweet ") + "pastry in the shape of a" + (vowels.Contains(pastry.Shape[0]) ? "n " + pastry.Shape : " " + pastry.Shape));
+                Console.WriteLine("Price: $" + pastryPair.Key.DefaultCost.ToString() + " each");
+                pastrySubtotal += pastryPair.Key.DefaultCost;
+            }
+            Console.WriteLine("Pastry Subtototal: " + pastrySubtotal.ToString());
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("Total Cost: " + (breadSubTotal + pastrySubtotal).ToString());
         }
 
         public void RemoveFromShopInventory(Product product, int count)
@@ -226,6 +276,7 @@ namespace Bakery
             MadePastry = new Dictionary<Pastry, int>();
             MadePastry.Add(startPastry, 5);
         }
+
         public void MakeBread(bool glutenFree, bool isSliced, int count)
         {
             Bread bread = new Bread(glutenFree, isSliced);

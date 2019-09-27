@@ -69,10 +69,10 @@ namespace Interactions
             return count;
         }
 
-        public string UserInput()
+        public static string UserInput()
         {
             string returnString = "";
-            Console.WriteLine("What would you like to do? [Order, Checkout, Leave]");
+            Console.WriteLine("What would you like to do? [Show Products, Order, Checkout, Leave]");
             while (returnString == "")
             {
                 string response = Console.ReadLine().ToLower();
@@ -88,6 +88,10 @@ namespace Interactions
                 {
                     returnString = "leave";
                 }
+                else if (response.StartsWith('s'))
+                {
+                    returnString = "show";
+                }
 
                 if (returnString == "")
                 {
@@ -96,6 +100,13 @@ namespace Interactions
             }
 
             return returnString;
+        }
+
+        public static void AddSpace()
+        {
+            Console.WriteLine("");
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("");
         }
 
 

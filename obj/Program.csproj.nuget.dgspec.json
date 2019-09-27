@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Christine\\desktop\\the-flour-shop\\Program.csproj": {}
+    "C:\\Users\\Christine\\Desktop\\the-flour-shop\\Program.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Christine\\desktop\\the-flour-shop\\Program.csproj": {
+    "C:\\Users\\Christine\\Desktop\\the-flour-shop\\Program.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Christine\\desktop\\the-flour-shop\\Program.csproj",
+        "projectUniqueName": "C:\\Users\\Christine\\Desktop\\the-flour-shop\\Program.csproj",
         "projectName": "Program",
-        "projectPath": "C:\\Users\\Christine\\desktop\\the-flour-shop\\Program.csproj",
+        "projectPath": "C:\\Users\\Christine\\Desktop\\the-flour-shop\\Program.csproj",
         "packagesPath": "C:\\Users\\Christine\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Christine\\desktop\\the-flour-shop\\obj\\",
+        "outputPath": "C:\\Users\\Christine\\Desktop\\the-flour-shop\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

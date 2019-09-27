@@ -8,7 +8,7 @@ namespace Bakery
 {
     public class Shop
     {
-        public Dictionary<string,int> Order { get; set; }
+        public Dictionary<Product,int> Order { get; set; }
         public Dictionary<Bread, int> MadeBread { get; set; }
         public Dictionary<Pastry, int> MadePastry { get; set; }
 
@@ -16,7 +16,7 @@ namespace Bakery
         public Shop(string name)
         {
             Name = name;
-            Order = new Dictionary<string, int>();
+            Order = new Dictionary<Product, int>();
             MakeFirstProducts();
         }
 
@@ -43,7 +43,8 @@ namespace Bakery
             {
                 if(breadPair.Value > 0)
                 {
-                    Console.WriteLine(" + " + (breadPair.Value) + " - " + (breadPair.Key.IsGlutenFree ? "Gluten free bread " : "Bread ") + "that is " + (breadPair.Key.IsSliced ? "sliced" : "a whole loaf"));
+                    Console.WriteLine(" + Qty " + (breadPair.Value) + " - " + (breadPair.Key.IsGlutenFree ? "Gluten free bread " : "Bread ") + "that is " + (breadPair.Key.IsSliced ? "sliced" : "a whole loaf"));
+                    Console.WriteLine("Price: $" + breadPair.Key.DefaultCost.ToString() + " each");
                 }
             }
             Console.WriteLine("");
@@ -60,6 +61,7 @@ namespace Bakery
                 if (pastryPair.Value > 0)
                 {
                     Console.WriteLine(" + " + (pastryPair.Value) + " - " + (pastryPair.Key.IsSavory ? "Savory " : "Sweet ") + "pastry in the shape of a" + (vowels.Contains(pastryPair.Key.Shape[0]) ? "n " + pastryPair.Key.Shape : " " + pastryPair.Key.Shape));
+                    Console.WriteLine("Price: $" + pastryPair.Key.DefaultCost.ToString() + " each");
                 }
             }
             Console.WriteLine("");
@@ -67,30 +69,36 @@ namespace Bakery
 
         public void RequestProduct()
         {
-            string[] productOptions = new string[]{"Bread", "Pastry", "Nevermind"};
+            string[] productOptions = new string[]{"bread", "pastry", "nevermind"};
             Console.WriteLine("What would you like to order? [Bread, Pastry, Nevermind]");
             string product = Interaction.AskOptionsQuestion(productOptions, "So.. What would you like to order?  [Bread, Pastry, Nevermind]");
             if(product.StartsWith('b'))
             {
                 bool[] breadRequest = RequestBread();
                 int breadCount = IsBreadMade(breadRequest);
-                int breadToMake = ProductQuantity(breadCount);
-                if (breadToMake > 0)
+                int[] breadToMake = ProductQuantity(breadCount);
+                if (breadToMake[0] > 0)
                 {
                     Console.WriteLine("Your bread just went in the oven! Please wait. It's worth it!");
-                    MakeBread(breadRequest[0], breadRequest[1], breadToMake);
+                    MakeBread(breadRequest[0], breadRequest[1], breadToMake[0]);
                 }
+                Bread breadEx = new Bread(breadRequest[0], breadRequest[1]);
+                AddToOrder(breadEx, breadToMake[1]);
+                RemoveFromShopInventory(breadEx, breadToMake[1]);
             }
             else if(product.StartsWith('p'))
             {
                 string[] pastryRequest = RequestPastry();
                 int pastryCount = IsPastryMade(Convert.ToBoolean(pastryRequest[0]),pastryRequest[1]);
-                int pastryToMake = ProductQuantity(pastryCount);
-                if(pastryToMake > 0)
+                int[] pastryToMake = ProductQuantity(pastryCount);
+                if(pastryToMake[0] > 0)
                 {
-                    Console.WriteLine("Your " + (pastryToMake == 1 ? "pastry" : "pastries") + " just went in the oven! Please wait. It's worth it!");
-                    MakePastry(Convert.ToBoolean(pastryRequest[0]), pastryRequest[1], pastryToMake);
+                    Console.WriteLine("Your " + (pastryToMake[0] == 1 ? "pastry" : "pastries") + " just went in the oven! Please wait. It's worth it!");
+                    MakePastry(Convert.ToBoolean(pastryRequest[0]), pastryRequest[1], pastryToMake[0]);
                 }
+                Pastry pastryEx = new Pastry(Convert.ToBoolean(pastryRequest[0]), pastryRequest[1]);
+                AddToOrder(pastryEx, pastryToMake[1]);
+                RemoveFromShopInventory(pastryEx, pastryToMake[1]);
             }
             else if(product.StartsWith('n'))
             {
@@ -98,7 +106,7 @@ namespace Bakery
             }
         }
 
-        public int ProductQuantity(int existingCount)
+        public int[] ProductQuantity(int existingCount)
         {
             int countToMake = 0;
             Console.WriteLine("How many would you like to order?");
@@ -126,7 +134,8 @@ namespace Bakery
                 Console.WriteLine("Oh, you don't want it anymore? What a shame...");
                 countToMake = -1;
             }
-            return countToMake;
+            int[] quantity = new int[]{countToMake, count};
+            return quantity;
         }
 
         public bool[] RequestBread()
@@ -179,13 +188,37 @@ namespace Bakery
             }
             return pastryCount;
         }
-        public void AddToOrder(int count, Product product)
+        public void AddToOrder(Product product, int count)
         {
+            Product inOrder = Order.Where(orderPair => orderPair.Key == product).FirstOrDefault().Key;
+            if(inOrder != null)
+            {
+                Order[product] += count;
+            }
+            else
+            {
+                Order.Add(product, count);
+            }
+        }
 
+        public void RemoveFromShopInventory(Product product, int count)
+        {
+            if(product.Type == "Bread")
+            {
+                Bread breadProduct = (Bread) product;
+                Bread bread = MadeBread.Where(breadPair => breadPair.Key.IsGlutenFree == breadProduct.IsGlutenFree && breadPair.Key.IsSliced == breadProduct.IsSliced).FirstOrDefault().Key;
+                MadeBread[bread] -= count;
+            }
+            else
+            {
+                Pastry pastryProduct = (Pastry) product;
+                Pastry pastry = MadePastry.Where(pastryPair => pastryPair.Key.IsSavory == pastryProduct.IsSavory && pastryPair.Key.Shape == pastryProduct.Shape).FirstOrDefault().Key;
+                MadePastry[pastry] -= count;
+            }
         }
 
         
-        public void MakeFirstProducts(){
+        private void MakeFirstProducts(){
             Bread startBread = new Bread(false, false);
             MadeBread = new Dictionary<Bread, int>();
             MadeBread.Add(startBread, 2);

@@ -1,0 +1,11 @@
+C:\Users\Christine\Desktop\the-flour-shop\bin\Debug\netcoreapp2.2\Program.deps.json
+C:\Users\Christine\Desktop\the-flour-shop\bin\Debug\netcoreapp2.2\Program.runtimeconfig.json
+C:\Users\Christine\Desktop\the-flour-shop\bin\Debug\netcoreapp2.2\Program.runtimeconfig.dev.json
+C:\Users\Christine\Desktop\the-flour-shop\bin\Debug\netcoreapp2.2\Program.dll
+C:\Users\Christine\Desktop\the-flour-shop\bin\Debug\netcoreapp2.2\Program.pdb
+C:\Users\Christine\Desktop\the-flour-shop\obj\Debug\netcoreapp2.2\Program.csprojAssemblyReference.cache
+C:\Users\Christine\Desktop\the-flour-shop\obj\Debug\netcoreapp2.2\Program.csproj.CoreCompileInputs.cache
+C:\Users\Christine\Desktop\the-flour-shop\obj\Debug\netcoreapp2.2\Program.AssemblyInfoInputs.cache
+C:\Users\Christine\Desktop\the-flour-shop\obj\Debug\netcoreapp2.2\Program.AssemblyInfo.cs
+C:\Users\Christine\Desktop\the-flour-shop\obj\Debug\netcoreapp2.2\Program.dll
+C:\Users\Christine\Desktop\the-flour-shop\obj\Debug\netcoreapp2.2\Program.pdb

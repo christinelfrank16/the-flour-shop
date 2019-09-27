@@ -17,7 +17,6 @@ This is a console application which welcomes the user to The Flour Shop and prov
 * Open a new Command Terminal and route to the root of the local repository
 * Enter command 'dotnet run' into the Terminal
 
-_{Leave nothing to chance! You want it to be easy for potential users, employers and collaborators to run your app. Do I need to run a server? How should I set up my databases? Is there other code this app depends on?}_
 
 ## Known Bugs
 
@@ -28,7 +27,7 @@ None known at this time.
 Find a bug?! Add an issue to the GitHub Repo.
 Repo: https://github.com/christinelfrank16/the-flour-shop
 
-Other Contact 
+Other Contact
 Email: christine.braun13@gmail.com
 LinkedIn: https://www.linkedin.com/in/christine-frank/
 

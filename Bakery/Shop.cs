@@ -362,6 +362,7 @@ namespace Bakery
                     {
                         RemoveFromShopInventory(orderpair.Key, orderpair.Value);
                     }
+                    Order = new Dictionary<Product, int>();
                 }
                 else
                 {

@@ -26,8 +26,8 @@ namespace Bank
 
         public void DisplayMoney(Wallet wallet)
         {
-            Console.WriteLine("Your Account value is: " + Account.ToString());
-            Console.WriteLine("Your wallet has: " + wallet.Cash.ToString());
+            Console.WriteLine("Your Account value is: $" + Account.ToString());
+            Console.WriteLine("Your wallet has: $" + wallet.Cash.ToString());
         }
 
         public Wallet BankAction(Wallet wallet)
@@ -53,6 +53,12 @@ namespace Bank
                         Deposit(value);
                     }
                 }
+
+                Interaction.AddSpace();
+                Console.WriteLine("Current values: ");
+                DisplayMoney(wallet);
+
+                Console.WriteLine("");
             }
 
             return wallet;

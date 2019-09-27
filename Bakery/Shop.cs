@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using Bank;
 using Interactions;
 
 namespace Bakery
@@ -23,6 +24,30 @@ namespace Bakery
         public void WelcomeMessage()
         {
             Console.WriteLine("Welcome to "+ Name + "!");
+        }
+
+        public bool BakeryActions(Wallet wallet)
+        {
+            bool inShop = true;
+            Interaction.AddSpace();
+            string toDo = Interaction.UserInput();
+            if (toDo == "order")
+            {
+                RequestProduct();
+            }
+            else if (toDo == "show")
+            {
+                ProductsListing();
+            }
+            else if (toDo == "checkout")
+            {
+                inShop = Checkout(wallet);
+            }
+            else if (toDo == "leave")
+            {
+                inShop = LeaveShop();
+            }
+            return inShop;
         }
 
         public static void GoodByeMessage()
@@ -251,6 +276,16 @@ namespace Bakery
             Console.WriteLine("Total Cost: " + (breadSubTotal + pastrySubtotal).ToString());
         }
 
+        public double OrderTotal()
+        {
+            double orderTotal = 0;
+            foreach (KeyValuePair<Product, int> productPair in Order)
+            {
+                orderTotal += (productPair.Key.DefaultCost * productPair.Value);
+            }
+            return orderTotal;
+        }
+
         public void RemoveFromShopInventory(Product product, int count)
         {
             if(product.Type == "Bread")
@@ -311,19 +346,28 @@ namespace Bakery
             }
         }
 
-        public bool Checkout()
+        public bool Checkout(Wallet wallet)
         {
           bool inShop = true;
           DisplayOrder();
+          Interaction.AddSpace();
+          Console.WriteLine("You currently have $" + wallet.CheckCash() + " in your wallet." );
           Console.WriteLine("Would you like to continue checking out? [Y/N]");
           bool contWithOrder = Interaction.AskYesNoQuestion("Can you say that again? Would you like to continue checking out? [Y/N]");
           if(contWithOrder)
           {
-              foreach(KeyValuePair<Product, int> orderpair in Order)
-              {
-                  RemoveFromShopInventory(orderpair.Key, orderpair.Value);
-              }
-              inShop = false;
+                if(wallet.RemoveCash(OrderTotal()))
+                {
+                    foreach(KeyValuePair<Product, int> orderpair in Order)
+                    {
+                        RemoveFromShopInventory(orderpair.Key, orderpair.Value);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("And I made all those items for you...");
+                }
+                    inShop = false;
           }
           return inShop;
         }

@@ -17,7 +17,7 @@ namespace Interactions
                 }
                 else
                 {
-                    Console.WriteLine(badAnswerMessage);
+                    Console.WriteLine(badAnswerMessage + " (Type the option you would like)");
                 }
             }
             return answer;
@@ -63,7 +63,29 @@ namespace Interactions
                 }
                 if(count < 0)
                 {
-                    Console.WriteLine(badAnswerMessage);
+                    Console.WriteLine(badAnswerMessage + " (positive values only)");
+                }
+            }
+            return count;
+        }
+
+        public static double AskPositiveDoubleQuestion(string badAnswerMessage)
+        {
+            double count = -1.00;
+            while (count < 0)
+            {
+                string countString = Console.ReadLine();
+                try
+                {
+                    count = Convert.ToInt64(countString);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine(badAnswerMessage + " (in numeric form)");
+                }
+                if (count < 0)
+                {
+                    Console.WriteLine(badAnswerMessage + " (positive values only)");
                 }
             }
             return count;

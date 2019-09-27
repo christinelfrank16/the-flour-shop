@@ -37,7 +37,7 @@ namespace Bakery
             Console.WriteLine("");
             ListBreads();
             ListPastries();
-            Console.WriteLine("If you don't see something you want, we may be able to make one for you.");
+            Console.WriteLine("If you don't see something you want, we may be able to make it for you.");
         }
 
         public void ListBreads()
@@ -231,7 +231,7 @@ namespace Bakery
                 Bread bread = (Bread) breadPair.Key;
                 Console.WriteLine(" + Qty " + (breadPair.Value) + " - " + (bread.IsGlutenFree ? "Gluten free bread " : "Bread ") + "that is " + (bread.IsSliced ? "sliced" : "a whole loaf"));
                 Console.WriteLine("Price: $" + breadPair.Key.DefaultCost.ToString() + " each");
-                breadSubTotal += breadPair.Key.DefaultCost;
+                breadSubTotal += (breadPair.Key.DefaultCost * breadPair.Value);
             }
             Console.WriteLine("Bread Subtototal: " + breadSubTotal.ToString());
             Console.WriteLine("");
@@ -241,9 +241,9 @@ namespace Bakery
             foreach(KeyValuePair<Product,int> pastryPair in Order.Where(pair => pair.Key.Type == "Pastry"))
             {
                 Pastry pastry = (Pastry) pastryPair.Key;
-                Console.WriteLine(" + " + (pastryPair.Value) + " - " + (pastry.IsSavory ? "Savory " : "Sweet ") + "pastry in the shape of a" + (vowels.Contains(pastry.Shape[0]) ? "n " + pastry.Shape : " " + pastry.Shape));
+                Console.WriteLine(" + Qty " + (pastryPair.Value) + " - " + (pastry.IsSavory ? "Savory " : "Sweet ") + "pastry in the shape of a" + (vowels.Contains(pastry.Shape[0]) ? "n " + pastry.Shape : " " + pastry.Shape));
                 Console.WriteLine("Price: $" + pastryPair.Key.DefaultCost.ToString() + " each");
-                pastrySubtotal += pastryPair.Key.DefaultCost;
+                pastrySubtotal += (pastryPair.Key.DefaultCost * pastryPair.Value);
             }
             Console.WriteLine("Pastry Subtototal: " + pastrySubtotal.ToString());
             Console.WriteLine("");

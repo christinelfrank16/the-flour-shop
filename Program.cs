@@ -9,6 +9,7 @@ class Program
     static void Main()
     {
         Shop flourShop = new Shop("The Flour Shop");
+        Console.WriteLine("");
         flourShop.WelcomeMessage();
         Interaction.AddSpace();
         flourShop.ProductsListing();

@@ -24,7 +24,7 @@ namespace Bakery
         {
             Console.WriteLine("Welcome to "+ Name + "!");
         }
-        
+
         public static void GoodByeMessage()
         {
             Console.WriteLine("Thank you, please come again!");
@@ -151,11 +151,11 @@ namespace Bakery
             Console.WriteLine("Would you like your bread gluten free? [Y/N]");
 
             bool isGlutenFree = Interaction.AskYesNoQuestion("Sorry, I didn't get that. Would you like your bread gluten free? [Y/N]");
-            
+
             Console.WriteLine("Would you like your bread sliced? [Y/N]");
 
             bool isSliced = Interaction.AskYesNoQuestion("Sorry, I didn't get that. Would you like your bread sliced? [Y/N]");
-            
+
             bool[] requestedBread = new bool[] {isGlutenFree, isSliced};
             return requestedBread;
         }
@@ -267,7 +267,7 @@ namespace Bakery
             }
         }
 
-        
+
         private void MakeFirstProducts(){
             Bread startBread = new Bread(false, false);
             MadeBread = new Dictionary<Bread, int>();
@@ -309,6 +309,36 @@ namespace Bakery
             {
                 MadePastry.Add(pastry, count);
             }
+        }
+
+        public bool Checkout()
+        {
+          bool inShop = true;
+          DisplayOrder();
+          Console.WriteLine("Would you like to continue checking out? [Y/N]");
+          bool contWithOrder = Interaction.AskYesNoQuestion("Can you say that again? Would you like to continue checking out? [Y/N]");
+          if(contWithOrder)
+          {
+              foreach(KeyValuePair<Product, int> orderpair in Order)
+              {
+                  RemoveFromShopInventory(orderpair.Key, orderpair.Value);
+              }
+              inShop = false;
+          }
+          return inShop;
+        }
+
+        public bool LeaveShop()
+        {
+          bool inShop = true;
+          Console.WriteLine("Are you sure you want to leave? Your order will be cleared if you do. [Y/N]");
+          bool contToLeave = Interaction.AskYesNoQuestion("I didn't get your answer... Are you sure you want to leave? Your order will be cleared if you do. [Y/N]");
+          if(contToLeave)
+          {
+              inShop = false;
+              Order = new Dictionary<Product, int>();
+          }
+          return inShop;
         }
     }
 }

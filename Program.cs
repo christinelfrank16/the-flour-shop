@@ -26,27 +26,11 @@ class Program
             }
             else if (toDo == "checkout")
             {
-                flourShop.DisplayOrder();
-                Console.WriteLine("Would you like to continue checking out? [Y/N]");
-                bool contWithOrder = Interaction.AskYesNoQuestion("Can you say that again? Would you like to continue checking out? [Y/N]");
-                if(contWithOrder)
-                {
-                    foreach(KeyValuePair<Product, int> orderpair in flourShop.Order)
-                    {
-                        flourShop.RemoveFromShopInventory(orderpair.Key, orderpair.Value);
-                    }
-                    inShop = false;
-                }
+                inShop = flourShop.Checkout();
             }
             else if (toDo == "leave")
             {
-                Console.WriteLine("Are you sure you want to leave? Your order will be cleared if you do. [Y/N]");
-                bool contToLeave = Interaction.AskYesNoQuestion("I didn't get your answer... Are you sure you want to leave? Your order will be cleared if you do. [Y/N]");
-                if(contToLeave)
-                {
-                    inShop = false;
-                    flourShop.Order = new Dictionary<Product, int>();
-                }
+                inShop = flourShop.LeaveShop();
             }
 
         }

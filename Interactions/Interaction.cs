@@ -77,7 +77,7 @@ namespace Interactions
                 string countString = Console.ReadLine();
                 try
                 {
-                    count = Convert.ToInt64(countString);
+                    count = Double.Parse(countString);
                 }
                 catch (FormatException)
                 {

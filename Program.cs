@@ -1,6 +1,7 @@
 using System;
 using Bakery;
 using Bank;
+using Market;
 using Interactions;
 
 class Program
@@ -10,14 +11,15 @@ class Program
         Wallet yourWallet = new Wallet();
         BrickAndMortorBank piggyBank = new BrickAndMortorBank("The Piggy Bank");
         Shop flourShop = new Shop("The Flour Shop");
+        MarketStall fireside = new MarketStall("The FireSide");
 
         Console.WriteLine("Welcome to Baker's Lane! Explore and enjoy your visit!");
         bool stayInBakersLane = true;
         while(stayInBakersLane)
         {
-            Console.WriteLine("Where would you like to go? [Bakery, Bank, Market]");
-            string[] options = new string[]{"bakery", "bank", "market"};
-            string response = Interaction.AskOptionsQuestion(options, "I didn't understand that. Where would you like to go? [Bakery, Bank, Market]");
+            Console.WriteLine("Where would you like to go? [Bakery, Bank, Market, Leave]");
+            string[] options = new string[]{"bakery", "bank", "market", "leave"};
+            string response = Interaction.AskOptionsQuestion(options, "I didn't understand that. Where would you like to go? [Bakery, Bank, Market, Leave]");
             Console.WriteLine("");
             if(response == "bakery")
             {
@@ -37,9 +39,24 @@ class Program
                 piggyBank.BankAction(yourWallet);
                 piggyBank.GoodBye();
             }
-            else
+            else if(response == "market")
             {
-
+                fireside.Welcome();
+                bool stay = fireside.AskToWork();
+                if(stay)
+                {
+                    fireside.MarketActions(yourWallet);
+                    Console.WriteLine("Thanks for helping! Hope to see you again!");
+                }
+                else
+                {
+                    Console.WriteLine("Goodness, help is hard to find.. See ya later.");
+                }
+                
+            }
+            else 
+            {
+                stayInBakersLane = false;
             }
         }
 

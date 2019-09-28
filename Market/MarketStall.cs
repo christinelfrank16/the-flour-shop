@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Bank;
 using Interactions;
 
@@ -31,18 +32,22 @@ namespace Market
             return response;
         }
 
-        public bool MarketActions(Wallet wallet)
+        public void MarketActions(Wallet wallet)
         {
             Interaction.AddSpace();
-            Console.WriteLine("Want to keep selling things? [Y/N]");
+            Console.WriteLine("Here, take the front desk and sell to customers.");
             bool keepGoing = true;
             while(keepGoing)
             {
-
+                Random rnd = new Random();
+                int customerInterest = rnd.Next(0,10);
+                Thread.Sleep(200 * customerInterest);
+                SaleInteraction(wallet);
+                Thread.Sleep(300);
+                Interaction.AddSpace();
+                Console.WriteLine("Want to keep selling things? [Y/N]");
+                keepGoing = Interaction.AskYesNoQuestion("Sooo.... Do you want to keep selling things? [Y/N]");
             }
-            keepGoing = Interaction.AskYesNoQuestion("Sooo.... Do you want to keep selling things? [Y/N]");
-
-            return keepGoing;
         }
 
         public void SaleInteraction(Wallet wallet)
@@ -123,7 +128,7 @@ namespace Market
             Console.WriteLine("Congrats, you sold " + item.Name + " for " + item.Price.ToString() + "!");
             Console.WriteLine("This time, I'll let you have " + ratio.ToString() + "% of the cut.");
             
-            double earnings = item.Price*0.5*(ratio/100);
+            double earnings = item.Price*0.50*((double)ratio/100);
             Console.WriteLine("You receive $" + earnings.ToString() + ".");
             wallet.AddCash(earnings);
             RemoveItem(item);
